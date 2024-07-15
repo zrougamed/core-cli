@@ -1,0 +1,86 @@
+version: 2.1
+orbs:
+  python: circleci/python@1.5.0
+  win: circleci/windows@2.2.0
+  macos: circleci/macos@2.1.0
+
+jobs:
+  centos-Build:
+    docker:
+      - image: centos/python-39-centos7
+    steps:
+      - checkout
+      - run:
+          name: "Install Deps"
+          command: pip install  -r requirements.txt
+      - run:
+          name: "Build Binary"
+          command: pyinstaller -F cli.py
+
+      - store_artifacts:
+          path: /opt/app-root/src/project/dist/cli
+          destination: core-cli
+
+  mac-Build:
+    macos:
+      xcode: 12.5.1
+    steps:
+      - checkout
+      - run:
+          name: "Install Deps"
+          command: pip3 install --user -r requirements.txt
+      - run:
+          name: Build
+          command: python3 -m PyInstaller --onefile  cli.py
+
+      - store_artifacts:
+          path: /Users/distiller/project/dist/cli
+          destination: core-cli
+
+  windows-Build:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - run:
+          name: "Install Python"
+          command: choco install python --version=3.9.19
+      - run:
+          name: "Install Curl"
+          command: choco install curl
+      - checkout
+      - run:
+          name: "Install Deps"
+          command: pip install --user -r requirements.txt
+      - run:
+          name: "Build Binary"
+          command: c:\python39\python.exe -m PyInstaller -F cli.py     
+      
+      - store_artifacts:
+          path: C:\Users\circleci\project\dist\cli.exe
+          destination: core-cli.exe
+
+  ubuntu-Build:
+    docker:
+      - image: cimg/python:3.9.19
+    working_directory:  /home/circleci/project/
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Build
+          command: pyinstaller --onefile  cli.py
+
+      - store_artifacts:
+          path: /home/circleci/project/dist/cli
+          destination: core-cli
+
+
+workflows:
+  builer: 
+    jobs:
+      - centos-Build
+      - mac-Build
+      - windows-Build
+      - ubuntu-Build
