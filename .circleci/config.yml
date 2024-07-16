@@ -7,7 +7,7 @@ orbs:
 jobs:
   centos-Build:
     docker:
-      - image: centos/python-39-centos7
+      - image: centos/python-38-centos7
     steps:
       - checkout
       - run:
@@ -23,7 +23,7 @@ jobs:
 
   mac-Build:
     macos:
-      xcode: 12.5.1
+      xcode: 13.4.1
     steps:
       - checkout
       - run:
@@ -44,7 +44,7 @@ jobs:
     steps:
       - run:
           name: "Install Python"
-          command: choco install python --version=3.9.19
+          command: choco install python --version=3.9.19 --force --allow-downgrade
       - run:
           name: "Install Curl"
           command: choco install curl
