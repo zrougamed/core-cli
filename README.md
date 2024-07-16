@@ -1,3 +1,7 @@
+
+![Cli Tool For Platform Engineering](./images/cli.jpg)
+
+
 # KIND, ArgoCD, Jenkins, and Kubernetes CLI
 
 This CLI tool allows you to manage KIND clusters, ArgoCD applications, Jenkins jobs and Kubernetes efficiently using Python. It provides functionality for working with Docker containers, KIND clusters, ArgoCD applications, Jenkins jobs and Kubernetes clusters.
@@ -246,3 +250,11 @@ Contributions are welcome! Please submit a pull request or open an issue to disc
 ## License
 
 This project is licensed under the MIT License.
+
+
+## Screenshots 
+
+![describe pods](./images/describe_pods.png)
+
+
+![Image Description](./images/list_pods.png)
