@@ -10,9 +10,40 @@ from modules.kubernetes_manager import list_pods, list_services, delete_pod, des
 
 console = Console()
 
-# Load configuration from config.ini file
+# Get the directory path of the current script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to config.ini
+config_path = os.path.join(current_dir, 'config.ini')
+
+# Check if config.ini exists; if not, generate it with default values
+if not os.path.exists(config_path):
+    config = configparser.ConfigParser()
+
+    # Default values for each section
+    config['KIND'] = {
+        'ContainerName': 'my-kind-container'
+    }
+
+    config['ARGOCD'] = {
+        'Url': 'https://argocd.example.com',
+        'Username': 'argocd_user',
+        'Password': 'argocd_password'
+    }
+
+    config['JENKINS'] = {
+        'Url': 'https://jenkins.example.com',
+        'Username': 'jenkins_user',
+        'Password': 'jenkins_password'
+    }
+
+    # Write the configuration to config.ini
+    with open(config_path, 'w') as configfile:
+        config.write(configfile)
+
+# Now read the configuration from config.ini
 config = configparser.ConfigParser()
-config.read('config/config.ini')
+config.read(config_path)
 
 # Get credentials from environment variables or config file
 kind_container_name = os.getenv('KIND_CONTAINER_NAME', config['KIND']['ContainerName'])
